@@ -14,7 +14,7 @@ if (subscribe_button.getAttribute('data-type') === 'subscribe') {
 function subscribe() {
     var fallback = subscribe_button.innerHTML;
     subscribe_button.onclick = unsubscribe;
-    subscribe_button.innerHTML = '<b>' + subscribe_data.unsubscribe_text + ' | ' + subscribe_data.sub_count_text + '</b>';
+    subscribe_button.innerHTML = '<b>' + subscribe_data.unsubscribe_text + '</b><i>' + subscribe_data.sub_count_text + "</i>";
 
     var url = '/subscription_ajax?action_create_subscription_to_channel=1&redirect=false' +
         '&c=' + subscribe_data.ucid;
@@ -30,7 +30,7 @@ function subscribe() {
 function unsubscribe() {
     var fallback = subscribe_button.innerHTML;
     subscribe_button.onclick = subscribe;
-    subscribe_button.innerHTML = '<b>' + subscribe_data.subscribe_text + ' | ' + subscribe_data.sub_count_text + '</b>';
+    subscribe_button.innerHTML = '<b>' + subscribe_data.subscribe_text + '</b><i>' + subscribe_data.sub_count_text + "</i>";
 
     var url = '/subscription_ajax?action_remove_subscriptions=1&redirect=false' +
         '&c=' + subscribe_data.ucid;

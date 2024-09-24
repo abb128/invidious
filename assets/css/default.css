@@ -4,9 +4,14 @@
 
 html,
 body {
+  background-color: #eee;
   font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica,
     Arial, sans-serif;
+  
+  min-height: 100vh;
+
+  transition: background-color 0.4s;
 }
 
 #contents {
@@ -70,7 +75,7 @@ body {
   border-radius: 50%;
 }
 
-.channel-profile > img {
+.channel-profile>img {
   width: 48px;
   height: auto;
 }
@@ -256,21 +261,24 @@ div.thumbnail > .bottom-right-overlay {
 
 .navbar {
   margin: 1em 0;
-  display: flex; /* this is also defined in framework, but in case of future changes */
+  display: flex;
+  /* this is also defined in framework, but in case of future changes */
   align-items: center;
   justify-content: space-between;
 }
 
-.navbar > div {
+.navbar>div {
   flex: 1;
 }
 
-.searchbar {
-  flex-grow: 2; /* take double the space of the other items */
+.navbar>.searchbar {
+  flex-grow: 2;
+  /* take double the space of the other items */
 }
 
 .navbar a {
-  padding: 0; /* this way it will stay aligned with content under */
+  padding: 0;
+  /* this way it will stay aligned with content under */
 }
 
 .navbar .index-link {
@@ -278,9 +286,8 @@ div.thumbnail > .bottom-right-overlay {
   display: inline;
 }
 
-.searchbar .pure-form {
-  display: flex;
-}
+.navbar>.searchbar .pure-form input[type="search"] {
+  margin-bottom: 1px;
 
 .searchbar .pure-form fieldset {
   padding: 0;
@@ -325,6 +332,14 @@ input[type="search"]::-webkit-search-cancel-button {
 
 .searchbar #searchbutton:hover {
   color: rgb(0, 182, 240);
+.navbar>.searchbar .pure-form fieldset {
+  padding: 0;
+}
+
+/* attract focus to the searchbar by adding a subtle transition */
+.navbar>.searchbar .pure-form input[type="search"]:focus {
+  margin-bottom: 0px;
+  border-bottom: 2px solid #aaa;
 }
 
 .user-field {
@@ -362,7 +377,7 @@ input[type="search"]::-webkit-search-cancel-button {
     flex-direction: column;
   }
 
-  .navbar > div {
+  .navbar>div {
     display: flex;
     justify-content: center;
     margin-bottom: 25px;
@@ -370,6 +385,14 @@ input[type="search"]::-webkit-search-cancel-button {
 
   .navbar > .searchbar > form {
     width: 75%;
+  }
+
+  .navbar>div:not(:last-child) {
+    margin-bottom: 1em;
+  }
+
+  .navbar>.searchbar>form {
+    width: 60%;
   }
 
   h1 {
@@ -390,7 +413,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 @media screen and (max-width: 320px) {
-  .navbar > .searchbar > form {
+  .navbar>.searchbar>form {
     width: 100%;
     margin: 0 1em;
   }
@@ -493,6 +516,7 @@ footer span {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -501,6 +525,168 @@ footer span {
 fieldset > select,
 span > select {
   color: rgba(49, 49, 51, 1);
+}
+
+/* Control Bar */
+@media screen and (max-width: 640px) {
+
+  .video-js .vjs-control-bar,
+  .vjs-menu-button-popup .vjs-menu .vjs-menu-content {
+    overflow-x: scroll;
+  }
+}
+
+ul.vjs-menu-content::-webkit-scrollbar {
+  display: none;
+}
+
+.vjs-user-inactive {
+  cursor: none;
+}
+
+.video-js .vjs-text-track-display>div>div>div {
+  background-color: rgba(0, 0, 0, 0.75) !important;
+  border-radius: 9px !important;
+  padding: 5px !important;
+}
+
+.vjs-play-control,
+.vjs-volume-panel,
+.vjs-current-time,
+.vjs-time-control,
+.vjs-duration,
+.vjs-progress-control,
+.vjs-remaining-time {
+  order: 1;
+}
+
+.vjs-captions-button {
+  order: 2;
+}
+
+.vjs-quality-selector,
+.video-js .vjs-http-source-selector {
+  order: 3;
+}
+
+.vjs-playback-rate {
+  order: 4;
+}
+
+.vjs-share-control {
+  order: 5;
+}
+
+.vjs-fullscreen-control {
+  order: 6;
+}
+
+.vjs-playback-rate>.vjs-menu {
+  width: 50px;
+}
+
+.vjs-control-bar {
+  display: flex;
+  flex-direction: row;
+  scrollbar-width: none;
+}
+
+.vjs-control-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.video-js .vjs-icon-cog {
+  font-size: 18px;
+}
+
+.video-js .vjs-control-bar,
+.vjs-menu-button-popup .vjs-menu .vjs-menu-content {
+  background-color: rgba(35, 35, 35, 0.75);
+}
+
+.vjs-menu li.vjs-menu-item:focus,
+.vjs-menu li.vjs-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.75);
+  color: rgba(49, 49, 51, 0.75);
+}
+
+.vjs-menu li.vjs-selected,
+.vjs-menu li.vjs-selected:focus,
+.vjs-menu li.vjs-selected:hover {
+  background-color: rgba(0, 182, 240, 0.75);
+}
+
+/* Progress Bar */
+.video-js .vjs-slider {
+  background-color: rgba(15, 15, 15, 0.5);
+}
+
+fieldset>select,
+span>select {
+  color: rgba(49, 49, 51, 1);
+}
+
+.video-js .vjs-load-progress,
+.video-js .vjs-load-progress div {
+  background: rgba(87, 87, 88, 1);
+}
+
+.video-js .vjs-slider:hover,
+.video-js button:hover {
+  color: rgba(0, 182, 240, 1);
+}
+
+.video-js .vjs-play-progress {
+  background-color: rgba(0, 182, 240, 1);
+}
+
+/* Overlay */
+.video-js .vjs-overlay {
+  background-color: rgba(35, 35, 35, 0.75);
+  color: rgba(255, 255, 255, 1);
+}
+
+/* ProgressBar marker */
+.vjs-marker {
+  background-color: rgba(255, 255, 255, 1);
+  z-index: 0;
+}
+
+/* Big "Play" Button */
+.video-js .vjs-big-play-button {
+  background-color: rgba(35, 35, 35, 0.5);
+}
+
+.video-js:hover .vjs-big-play-button {
+  background-color: rgba(35, 35, 35, 0.75);
+}
+
+.video-js .vjs-current-time,
+.video-js .vjs-time-divider,
+.video-js .vjs-duration {
+  display: block;
+}
+
+.video-js .vjs-time-divider {
+  min-width: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.video-js .vjs-poster {
+  background-size: cover;
+  object-fit: cover;
+}
+
+.player-dimensions.vjs-fluid {}
+
+video.video-js {
+  position: absolute;
+  height: 100%;
+}
+
+#player-container {
+  position: relative;
 }
 
 .pure-control-group label {
@@ -815,4 +1001,346 @@ h1, h2, h3, h4, h5, p,
 
 #download_widget {
     width: 100%;
+.video-js.player-style-youtube .vjs-big-play-button {
+  /*
+    Styles copied from video-js.min.css, definition of
+    .vjs-big-play-centered .vjs-big-play-button
+  */
+  top: 50%;
+  left: 50%;
+  margin-top: -0.81666em;
+  margin-left: -1.5em;
+}
+
+@media screen and (max-width:64em) {
+  .pure-u-lg-3-5 {
+    order: 1;
+  }
+
+  .pure-u-lg-1-5 {
+    order: 2;
+  }
+}
+
+/*
+Extensions from FreeTube fork*/
+
+.recommendVideo {
+  cursor: pointer;
+  /*height: 150px;*/
+
+  display: inline-flex;
+
+  width: 95%;
+  width: -moz-available;
+  /* WebKit-based browsers will ignore this. */
+  width: -webkit-fill-available;
+  /* Mozilla-based browsers will ignore this. */
+  width: fill-available;
+  width: stretch;
+  margin-top: 12px;
+}
+
+.recommendThumbnail {
+  float: left;
+  width: 80%;
+  position: relative;
+  height: min-content;
+}
+
+.recommendThumbnail img {
+  width: 100%;
+  max-height: 98px;
+  object-fit: cover;
+}
+
+.recommendTitle {
+  font-size: 14px;
+
+  font-weight: bold;
+
+  margin-top: 0px;
+
+  color: #333;
+
+
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0px;
+}
+
+.recommendVideo:hover .recommendTitle {
+  color: #3f7ac6;
+}
+
+.recommendedVideoList {
+  max-width: 418px;
+  justify-content: left;
+}
+
+.recommendChannel, .recommendDate {
+  margin-top: 2px;
+  margin-bottom: 0px;
+  font-size: 11px;
+  color: #767676;
+}
+
+.recommendRight {
+  width: 100%;
+  margin-left: 0.5em;
+}
+
+.videoDuration {
+  position: absolute;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 2px;
+  font-size: 11px;
+  text-align: right;
+  right: 0.25em;
+  bottom: -0.5em;
+}
+
+.cardBox {
+  background-color: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+  padding: 16px;
+  margin: 8px;
+  transition: background-color 0.4s;
+}
+
+.recommendedVideoList {
+  max-width: 418px;
+  justify-content: left;
+}
+
+
+#recommendations {
+  width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin: 0;
+}
+
+
+.sub-btn {
+
+background-color: #E7E7E7;
+border-radius: 0.5em;
+border-color: rgba(0,0,0,0.1);
+border-style: solid;
+border-width: 1px;
+font-size: 14px;
+padding: 0.3em 0.8em 0.3em 0;
+
+}
+
+.sub-btn i {
+text-emphasis: none;
+font-style: normal;
+color: #646464;
+margin-left: 4px;
+font-weight: normal;
+}
+
+.sub-btn b {
+    background: rgb(255,211,0);
+    background: linear-gradient(0deg, rgba(255,211,0,1) 0%, rgba(255,252,197,1) 100%);
+    border-radius: 0.5em;
+    color: #B07700;
+    padding: 0.3em 1em 0.3em 1em;
+    font-weight: initial;
+}
+
+
+
+.cardBox.vidTitle, .cardBox.subBox, .cardBox.vidComments, .cardBox.vidDesc, .cardBox.vidRatBox, .cardBox.vidDlBox {
+  margin:0;
+  margin-bottom: 0.5em;
+}
+
+.vidTFlex {
+  margin-top:0.5em;
+  display: flex;
+}
+
+.cardBox.vidRatBox{
+  flex: 3;
+}
+.cardBox.vidDlBox{
+  flex: 1;
+  margin-left: 0.5em;
+}
+
+.vidComments {
+  height: 80vh;
+  overflow-y: scroll;
+
+}
+
+.vidDesc p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.vidTitle h1 {
+  font-size: 24px;
+  font-weight: normal;
+  margin:0;
+}
+.vidTitle h3 {
+  font-size: 16px;
+  font-weight: normal;
+  margin:0;
+}
+
+.channel-profile span {
+  font-size:14px;
+  font-weight: normal;
+
+}
+
+.channel-profile p {
+  margin: 0;
+}
+
+.vidComment {
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.vidComment img:not(.creator-heart-background-hearted) {
+  padding-top:0em;
+  width:38px;
+}
+
+.vidCommentContent {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.vidCommentImgDiv {
+  min-width: 38px;
+}
+
+.vidCommentDDiv {
+  width: unset;
+  flex: 1;
+  margin-left: 0.5em;
+}
+
+.vidCommentDDiv p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.vidCommentDDiv p b span {
+  font-weight: normal;
+  color: #999;
+  font-size: 12px;
+}
+
+.commentThumbs {
+  font-size: 10px;
+  font-weight: normal;
+  color: #aaa;
+}
+
+.commentThumbs b {
+  font-weight: normal;
+  margin-left: 0.5em;
+}
+
+.vidRatBox #views {
+  font-style: normal;
+  margin-left: auto;
+  font-size: 22px;
+  white-space: nowrap;
+  ma4rgin-top: 5px;
+}
+
+.vidRatBox #starsText {
+  font-style: normal;
+  color: #aaa;
+  margin-top: 8px;
+  margin-left: 0.5em;
+  white-space: nowrap;
+  margin-right: 2em;
+}
+
+.vidMiscBtns {
+  display: flex;
+}
+.splitUp {
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #ddd;
+  padding-top: 8px;
+}
+
+.vidMiscBtns a {
+  margin-right: 2em;
+  color: #000;
+  opacity: 0.4;
+  height: 100%;
+  display: flex;
+}
+
+.vidStars img {
+  opacity: 0.2;
+}
+
+.vidStars .vidSBG {
+  background-image: url("/32_stars_full.png");
+  background-repeat: no-repeat;
+}
+
+.vidMiscBtns .vidMiscBtnsTxt {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 0.5em;
+  font-size: 12px;
+}
+
+.vidMiscBtns a img {
+  height: 20px;
+}
+
+.dl-btn b {
+  background: rgb(255, 0, 0);
+  background: linear-gradient(0deg, rgb(255, 0, 0) 0%, rgb(255, 112, 112) 100%);
+  border-radius: 0.5em;
+  color: #000;
+  padding: 0.3em 1em 0.3em 1em;
+  font-weight: initial;
+
+}
+
+.dl-btn {
+
+  background: none;
+  border: none;
+  padding: 8px;
+
+}
+
+
+.metadata p {
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.splitUp.metaata {
+  margin-top: 8px;
+}
+
+.splitUp.vidMiscBtns {
+  margin-top: 20px;
+  margin-bottom: -80px;
 }

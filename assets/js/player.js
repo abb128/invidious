@@ -2,6 +2,9 @@
 var player_data = JSON.parse(document.getElementById('player_data').textContent);
 var video_data = JSON.parse(document.getElementById('video_data').textContent);
 
+document.getElementById('player').style["position"] = "";
+document.getElementById('player').style["height"] = "";
+
 var options = {
     preload: 'auto',
     liveui: true,
@@ -703,6 +706,7 @@ addEventListener('keydown', function (e) {
 // https://github.com/ctd1500/videojs-hotkeys/blob/bb4a158b2e214ccab87c2e7b95f42bc45c6bfd87/videojs.hotkeys.js#L292-L328
 (function () {
     const pEl = document.getElementById('player');
+
 
     var volumeHover = false;
     var volumeSelector = pEl.querySelector('.vjs-volume-menu-button') || pEl.querySelector('.vjs-volume-panel');
