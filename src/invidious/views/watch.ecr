@@ -76,11 +76,11 @@ we're going to need to do it here in order to allow for translations.
             <% ucid = video.ucid %>
             <% author = video.author %>
             <% sub_count_text = video.sub_count_text %>
-            <div class="channel-profile" style="height:min-content; margin:auto; display:flex;">
+            <div class="channel-profile" style="height:48px ; margin:auto; display:flex;">
                 <a href="/channel/<%= video.ucid %>">
                     <img src="/ggpht<%= URI.parse(video.author_thumbnail).request_target %>" alt="" />
                 </a>
-                <div style="display: flex;flex-direction: column;margin-left:0.5em;">
+                <div style="display: flex;flex-direction: column;margin-left:0.5em;line-height:1em;">
                     <a href="/channel/<%= video.ucid %>">
                         <span><%= video.author %></span>
                     </a>
@@ -193,9 +193,7 @@ we're going to need to do it here in order to allow for translations.
                 <b><%= translate(locale, "Shared `x`", video.published.to_s("%B %-d, %Y")) %></b>
                 <% end %>
             </p>
-            <div>
-                <%= video.description_html %>
-            </div>
+            <div style="white-space: preserve;"><%= video.description_html %></div>
             <div class="splitUp metadata">
                 <% if user %>
                 <% playlists = PG_DB.query_all("SELECT id,title FROM playlists WHERE author = $1", user.email, as: {String, String}) %>

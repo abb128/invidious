@@ -68,7 +68,7 @@ module Invidious::Frontend::Comments
         html << <<-END_HTML
         <div class="pure-g vidComment" style="width:100%">
           <div class="vidCommentImgDiv channel-profile pure-u-4-24 pure-u-md-2-24">
-            <img loading="lazy" style="margin-right:1em;margin-top:1em;width:90%" src="#{author_thumbnail}" alt="" />
+            <img loading="lazy" style="margin-right:1em;margin-top:0.1em;width:90%" src="#{author_thumbnail}" alt="" />
           </div>
           <div class="vidCommentDDiv pure-u-20-24 pure-u-md-22-24">
             <p>
