@@ -66,17 +66,35 @@ module Invidious::Frontend::Comments
           end
         end
         html << <<-END_HTML
-        <div class="pure-g" style="width:100%">
-          <div class="channel-profile pure-u-4-24 pure-u-md-2-24">
+        <div class="pure-g vidComment" style="width:100%">
+          <div class="vidCommentImgDiv channel-profile pure-u-4-24 pure-u-md-2-24">
             <img loading="lazy" style="margin-right:1em;margin-top:1em;width:90%" src="#{author_thumbnail}" alt="" />
           </div>
-          <div class="pure-u-20-24 pure-u-md-22-24">
+          <div class="vidCommentDDiv pure-u-20-24 pure-u-md-22-24">
             <p>
               <b>
-                <a class="#{child["authorIsChannelOwner"] == true ? "channel-owner" : ""}" href="#{child["authorUrl"]}">#{author_name}</a>
+                <a class="#{child["authorIsChannelOwner"] == true ? "channel-owner" : ""}" href="#{child["authorUrl"]}">#{child["author"]}</a>
+        END_HTML
+        if comments["videoId"]?
+          html << <<-END_HTML
+            <a href="https://www.youtube.com/watch?v=#{comments["videoId"]}&lc=#{child["commentId"]}">
+          END_HTML
+        elsif comments["authorId"]?
+          html << <<-END_HTML
+            <a href="https://www.youtube.com/channel/#{comments["authorId"]}/community?lb=#{child["commentId"]}">
+          END_HTML
+        else
+          html << <<-END_HTML
+            <a>
+          END_HTML
+        end
+        html << <<-END_HTML
+        <span title="#{Time.unix(child["published"].as_i64).to_s(translate(locale, "%A %B %-d, %Y"))}">#{translate(locale, "`x` ago", recode_date(Time.unix(child["published"].as_i64), locale))} #{child["isEdited"] == true ? translate(locale, "(edited)") : ""}</span>
+                  
+                </a>
               </b>
-              #{sponsor_icon}
-              <p style="white-space:pre-wrap">#{child["contentHtml"]}</p>
+            </p>
+        <p class="vidCommentContent">#{child["contentHtml"]}</p>
         END_HTML
 
         if child["attachment"]?
@@ -142,25 +160,10 @@ module Invidious::Frontend::Comments
         end
 
         html << <<-END_HTML
-        <p>
-          <span title="#{Time.unix(child["published"].as_i64).to_s(translate(locale, "%A %B %-d, %Y"))}">#{translate(locale, "`x` ago", recode_date(Time.unix(child["published"].as_i64), locale))} #{child["isEdited"] == true ? translate(locale, "(edited)") : ""}</span>
-          |
-        END_HTML
-
-        if comments["videoId"]?
-          html << <<-END_HTML
-            <a rel="noreferrer noopener" href="https://www.youtube.com/watch?v=#{comments["videoId"]}&lc=#{child["commentId"]}" title="#{translate(locale, "YouTube comment permalink")}">[YT]</a>
-            |
-          END_HTML
-        elsif comments["authorId"]?
-          html << <<-END_HTML
-            <a rel="noreferrer noopener" href="https://www.youtube.com/channel/#{comments["authorId"]}/community?lb=#{child["commentId"]}" title="#{translate(locale, "YouTube comment permalink")}">[YT]</a>
-            |
-          END_HTML
-        end
-
-        html << <<-END_HTML
-          <i class="icon ion-ios-thumbs-up"></i> #{number_with_separator(child["likeCount"])}
+          <div class="commentThumbs">
+          <i class="icon ion-ios-thumbs-up"></i>
+          <b>#{number_with_separator(child["likeCount"])}</b>
+          </div>
         END_HTML
 
         if child["creatorHeart"]?

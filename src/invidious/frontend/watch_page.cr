@@ -19,10 +19,6 @@ module Invidious::Frontend::WatchPage
   end
 
   def download_widget(locale : String, video : Video, video_assets : VideoAssets) : String
-    if CONFIG.disabled?("downloads")
-      return "<p id=\"download\">#{translate(locale, "Download is disabled")}</p>"
-    end
-
     return String.build(4000) do |str|
       str << "<form"
       str << " class=\"pure-form pure-form-stacked\""
@@ -97,7 +93,7 @@ module Invidious::Frontend::WatchPage
       str << "\t\t</select>\n"
       str << "\t</div>\n"
 
-      str << "\t<button type=\"submit\" class=\"pure-button pure-button-primary\">\n"
+      str << "\t<button type=\"submit\" class=\"dl-btn\">\n"
       str << "\t\t<b>" << translate(locale, "Download") << "</b>\n"
       str << "\t</button>\n"
 

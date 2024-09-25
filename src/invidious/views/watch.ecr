@@ -78,7 +78,7 @@ we're going to need to do it here in order to allow for translations.
             <% sub_count_text = video.sub_count_text %>
             <div class="channel-profile" style="height:min-content; margin:auto; display:flex;">
                 <a href="/channel/<%= video.ucid %>">
-                    <img src="/ggpht<%= URI.parse(video.author_thumbnail).full_path %>">
+                    <img src="/ggpht<%= URI.parse(video.author_thumbnail).request_target %>" alt="" />
                 </a>
                 <div style="display: flex;flex-direction: column;margin-left:0.5em;">
                     <a href="/channel/<%= video.ucid %>">
@@ -106,21 +106,28 @@ we're going to need to do it here in order to allow for translations.
     </div>
     <div style="width: 80%">
         <div class="cardBox vidTitle">
-            <h1><%= HTML.escape(video.title) %></h1>
+            <h1>
+                <%= title %>
+            </h1>
+
             <% if !video.is_listed %>
-            <h3>
-                <%= translate(locale, "Unlisted") %>
-            </h3>
+                <h3>
+                    <i class="icon ion-ios-unlock"></i> <%= translate(locale, "Unlisted") %>
+                </h3>
             <% end %>
 
-            <% if !reason.empty? %>
-            <h3>
-                <%= reason %>
-            </h3>
-            <% elsif video.premiere_timestamp %>
-            <h3>
-                <%= translate(locale, "Premieres in `x`", recode_date((video.premiere_timestamp.as(Time) - Time.utc).ago, locale)) %>
-            </h3>
+            <% if video.reason %>
+                <h3>
+                    <%= video.reason %>
+                </h3>
+            <% elsif video.premiere_timestamp.try &.> Time.utc %>
+                <h3>
+                    <%= video.premiere_timestamp.try { |t| translate(locale, "Premieres in `x`", recode_date((t - Time.utc).ago, locale)) } %>
+                </h3>
+            <% elsif video.live_now %>
+                <h3>
+                    <%= video.premiere_timestamp.try { |t| translate(locale, "videoinfo_started_streaming_x_ago", recode_date((Time.utc - t).ago, locale)) } %>
+                </h3>
             <% end %>
         </div>
 
@@ -133,9 +140,9 @@ we're going to need to do it here in order to allow for translations.
                 <div style="display: flex;">
 
                     <div class="vidStars">
-                        <div class="vidSBG" style="width: <%= (rating / 5) * 100 %>%;"><img src="/32_stars_empty.png"></div>
+                        <div class="vidSBG" style="width: <%= 0.5 * 100 %>%;"><img src="/32_stars_empty.png"></div>
                     </div>
-                    <i id="starsText"><%= number_with_separator(video.likes + video.dislikes) %> ratings</i>
+                    <i id="starsText"><%= number_with_separator(video.likes) %> likes</i>
                     <i id="views"><%= number_with_separator(video.views) %> views</i>
                 </div>
                 <div class="vidMiscBtns splitUp">
@@ -174,47 +181,7 @@ we're going to need to do it here in order to allow for translations.
                 </div>
             </div>
             <div class="vidDlBox cardBox">
-                <% if CONFIG.dmca_content.includes?(video.id) || CONFIG.disabled?("downloads") %>
-                <p><%= translate(locale, "Download is disabled.") %></p>
-                <% else %>
-                <form class="pure-form pure-form-stacked" style="display: grid;" action="/latest_version" method="get" rel="noopener"
-                    target="_blank">
-                    <div class="pure-control-group">
-                        
-                        <select style="width:100%" name="download_widget" id="download_widget">
-                            <% fmt_stream.each do |option| %>
-                            <option
-                                value='{"id":"<%= video.id %>","itag":"<%= option["itag"] %>","title":"<%= URI.encode_www_form(video.title) %>-<%= video.id %>.<%= option["type"].split(";")[0].split("/")[1] %>"}'>
-                                <%= itag_to_metadata?(option["itag"]).try &.["height"]? || "~240" %>p -
-                                <%= option["type"].split(";")[0] %>
-                            </option>
-                            <% end %>
-                            <% video_streams.each do |option| %>
-                            <option
-                                value='{"id":"<%= video.id %>","itag":"<%= option["itag"] %>","title":"<%= URI.encode_www_form(video.title) %>-<%= video.id %>.<%= option["type"].split(";")[0].split("/")[1] %>"}'>
-                                <%= option["quality_label"] %> - <%= option["type"].split(";")[0] %> @
-                                <%= option["fps"] %>fps - video only
-                            </option>
-                            <% end %>
-                            <% audio_streams.each do |option| %>
-                            <option
-                                value='{"id":"<%= video.id %>","itag":"<%= option["itag"] %>","title":"<%= URI.encode_www_form(video.title) %>-<%= video.id %>.<%= option["type"].split(";")[0].split("/")[1] %>"}'>
-                                <%= option["type"].split(";")[0] %> @ <%= option["bitrate"] %>k - audio only
-                            </option>
-                            <% end %>
-                            <% captions.each do |caption| %>
-                            <option
-                                value='{"id":"<%= video.id %>","label":"<%= caption.name.simpleText %>","title":"<%= URI.encode_www_form(video.title) %>-<%= video.id %>.<%= caption.languageCode %>.vtt"}'>
-                                <%= translate(locale, "Subtitles - `x` (.vtt)", caption.name.simpleText) %>
-                            </option>
-                            <% end %>
-                        </select>
-                    </div>
-                    <button type="submit" class="dl-btn">
-                        <b><%= translate(locale, "Download") %></b>
-                    </button>
-                </form>
-                <% end %>
+                <%= Invidious::Frontend::WatchPage.download_widget(locale, video, video_assets) %>
             </div>
         </div>
 
@@ -259,10 +226,10 @@ we're going to need to do it here in order to allow for translations.
                 <% end %>
                 <% end %>
                 <p id="genre"><%= translate(locale, "Genre: ") %>
-                    <% if video.genre_url.empty? %>
-                    <%= video.genre %>
+                    <% if !video.genre_url %>
+                        <%= video.genre %>
                     <% else %>
-                    <a href="<%= video.genre_url %>"><%= video.genre %></a>
+                        <a href="<%= video.genre_url %>"><%= video.genre %></a>
                     <% end %>
                 </p>
                 <% if !video.license.empty? %>
@@ -271,8 +238,8 @@ we're going to need to do it here in order to allow for translations.
                 <p id="family_friendly">
                     <%= translate(locale, "Family friendly? ") %><%= translate_bool(locale, video.is_family_friendly) %>
                 </p>
-                <p id="wilson"><%= translate(locale, "Wilson score: ") %><%= video.wilson_score.round(4) %></p>
-                <p id="engagement"><%= translate(locale, "Engagement: ") %><%= engagement.round(2) %>%</p>
+                <p id="wilson" style="display: none; visibility: hidden;"></p>
+                <p id="engagement" style="display: none; visibility: hidden;"></p>
                 <% if video.allowed_regions.size != REGIONS.size %>
                 <p id="allowed_regions">
                     <% if video.allowed_regions.size < REGIONS.size // 2 %>
@@ -294,7 +261,7 @@ we're going to need to do it here in order to allow for translations.
 
             <% if params.related_videos %>
             <div class="cardBox recommendedVideoList" id="recommendations">
-                <% if !rvs.empty? %>
+                <% if !video.related_videos.empty? %>
                 <div <% if plid %>style="display:none" <% end %>>
                     <div class="pure-control-group">
                         <label for="continue"><%= translate(locale, "Play next by default: ") %></label>
@@ -303,7 +270,7 @@ we're going to need to do it here in order to allow for translations.
                 </div>
                 <% end %>
 
-                <% rvs.each do |rv| %>
+                <% video.related_videos.each do |rv| %>
                 <% if rv["id"]? %>
                 <a href="/watch?v=<%= rv["id"] %>">
                     <div class="recommendVideo">

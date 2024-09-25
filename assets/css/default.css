@@ -72,7 +72,7 @@ body {
   font-size: 1.17em;
   font-weight: bold;
   vertical-align: middle;
-  border-radius: 50%;
+  border-radius: 0%;
 }
 
 .channel-profile>img {
@@ -288,6 +288,7 @@ div.thumbnail > .bottom-right-overlay {
 
 .navbar>.searchbar .pure-form input[type="search"] {
   margin-bottom: 1px;
+}
 
 .searchbar .pure-form fieldset {
   padding: 0;
@@ -332,6 +333,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
 .searchbar #searchbutton:hover {
   color: rgb(0, 182, 240);
+}
 .navbar>.searchbar .pure-form fieldset {
   padding: 0;
 }
@@ -362,15 +364,15 @@ input[type="search"]::-webkit-search-cancel-button {
  * Responsive rules
  */
 
-@media only screen and (max-aspect-ratio: 16/9) {
+/*@media only screen and (max-aspect-ratio: 16/9) {*/
   .player-dimensions.vjs-fluid {
-    padding-top: 46.86% !important;
+    padding-top: 56.86% !important;
   }
 
   #player-container {
-    padding-bottom: 46.86% !important;
+    padding-bottom: 56.86% !important;
   }
-}
+/*}*/
 
 @media screen and (max-width: 767px) {
   .navbar {
@@ -1001,6 +1003,7 @@ h1, h2, h3, h4, h5, p,
 
 #download_widget {
     width: 100%;
+}
 .video-js.player-style-youtube .vjs-big-play-button {
   /*
     Styles copied from video-js.min.css, definition of
